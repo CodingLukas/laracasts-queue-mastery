@@ -1,8 +1,6 @@
 <?php
 
 use App\Jobs\Deploy;
-use App\Jobs\PullRepo;
-use App\Jobs\RunTests;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,14 +15,44 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    $chain = [
-        new PullRepo('laracasts/project1'),
-        new PullRepo('laracasts/project2'),
-        new PullRepo('laracasts/project3')
-    ];
+
+    \Illuminate\Support\Facades\Bus::chain([
+        new Deploy('laracasts/project1'),
+        function () {
+            \Illuminate\Support\Facades\Bus::batch([...])->dispatch();
+        }
+    ])->dispatch();
+
+
+//    $batch = [
+//        [ // array in batch represents chain
+//            new PullRepo('laracasts/project1'),
+//            new RunTests('laracasts/project1'),
+//            new Deploy('laracasts/project1'),
+//        ],
+//        [
+//            new PullRepo('laracasts/project2'),
+//            new RunTests('laracasts/project2'),
+//            new Deploy('laracasts/project2'),
+//        ] // both chains will run in parallel
+//    ];
+
 
 //    \Illuminate\Support\Facades\Bus::chain($chain)->dispatch(); // works like chain of responsibility pattern
-    \Illuminate\Support\Facades\Bus::batch($chain)->allowFailures()->dispatch(); // multiple workers will run in parallel
+//    $batch
+//        ->allowFailures()
+//        ->catch(function ($batch, $e) {
+//            // when failed
+//        })
+//        ->then(function ($batch) {
+//            // when whole batch completed succesfully
+//        })
+//        ->finally(function () {
+//            // run even if job failed
+//        })
+//        ->onQueue('deployments')
+//        ->onConnection('database')
+//        ->dispatch(); // multiple workers will run in parallel
 
 //    \App\Jobs\SendWelcomeEmail::dispatch();
 
