@@ -15,13 +15,14 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-
-    \Illuminate\Support\Facades\Bus::chain([
-        new Deploy('laracasts/project1'),
-        function () {
-            \Illuminate\Support\Facades\Bus::batch([...])->dispatch();
-        }
-    ])->dispatch();
+    (new Deploy())->dispatch();
+    (new Deploy())->dispatch();
+//    \Illuminate\Support\Facades\Bus::chain([
+//        new Deploy('laracasts/project1'),
+//        function () {
+//            \Illuminate\Support\Facades\Bus::batch([...])->dispatch();
+//        }
+//    ])->dispatch();
 
 
 //    $batch = [
