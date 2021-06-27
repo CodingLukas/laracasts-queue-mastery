@@ -1,5 +1,8 @@
 <?php
 
+use App\Jobs\Deploy;
+use App\Jobs\PullRepo;
+use App\Jobs\RunTests;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,7 +21,9 @@ Route::get('/', function () {
         \App\Jobs\SendWelcomeEmail::dispatch();
     }
 
-    \App\Jobs\ProcessPayment::dispatch()->onQueue('payments');
+//    \App\Jobs\SendWelcomeEmail::dispatch();
+
+//    \App\Jobs\ProcessPayment::dispatch()->onQueue('payments');
 
     return view('welcome');
 });

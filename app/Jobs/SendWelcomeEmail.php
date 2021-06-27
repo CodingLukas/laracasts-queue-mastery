@@ -13,8 +13,14 @@ class SendWelcomeEmail implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-//    public $tries = -1;
-//    public $backoff = 2;
+    public $maxExceptions = 2;
+    public $tries = 10;
+    /**
+     * if $backoff array count is less than $tries then worker will wait 2 secs before trying again, then next time 3 secs, and so on adding +1 everytime
+     * if $backoff [2, 5, 10] array count is equals $tries then worker will wait first time 2 secs, second time 5 secs, last time 10 secs
+     * if $backoff [2, 5, 10] array count is bigger than $tries then worker will wait 2 secs first time, then next time 5 secs, and then all other times 10 secs
+     */
+//    public $backoff = [2, 10];
 
     /**
      * Create a new job instance.
@@ -33,15 +39,18 @@ class SendWelcomeEmail implements ShouldQueue
      */
     public function handle()
     {
-//        throw new \Exception();
+        throw new \Exception();
 
-        sleep(3);
-
-        info('Hello!');
+        return $this->release();
     }
 
 //    public function retryUntil()
 //    {
 //        return now()->addMinute();
 //    }
+
+    public function failed($e)
+    {
+        info('Failed');
+    }
 }
