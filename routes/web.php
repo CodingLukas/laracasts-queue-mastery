@@ -1,6 +1,10 @@
 <?php
 
 use App\Jobs\Deploy;
+use App\Jobs\SendWelcomeEmail;
+use App\Jobs\TestJob;
+use App\Models\User;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,8 +19,18 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    (new Deploy())->dispatch();
-    (new Deploy())->dispatch();
+
+    TestJob::dispatch('THIS_IS_SECRET');
+
+
+//    DB::transaction(function(){
+//       $user = User::create([]);
+//
+//       SendWelcomeEmail::dispatch($user)->afterCommit();
+//    });
+
+//    (new Deploy())->dispatch();
+//    (new Deploy())->dispatch();
 //    \Illuminate\Support\Facades\Bus::chain([
 //        new Deploy('laracasts/project1'),
 //        function () {
